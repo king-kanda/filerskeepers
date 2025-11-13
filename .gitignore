@@ -37,10 +37,6 @@ ENV/
 *~
 .DS_Store
 
-# Logs
-logs/
-*.log
-
 # Reports
 reports/
 *.csv
