@@ -35,38 +35,6 @@ async def lifespan(app: FastAPI):
 # Create FastAPI application
 app = FastAPI(
     title="Books Scraper API",
-    description="""
-    # Books Scraper API
-
-    A production-grade web scraping and API system for monitoring book data from books.toscrape.com.
-
-    ## Features
-
-    * **Web Crawling**: Async web crawler with retry logic and resume capability
-    * **Change Detection**: Automated monitoring and detection of book data changes
-    * **RESTful API**: Secure API with authentication and rate limiting
-    * **Data Storage**: Efficient MongoDB storage with indexing
-    * **Scheduling**: Daily automated crawls with APScheduler
-
-    ## Authentication
-
-    All API endpoints require an API key. Include your API key in the `X-API-Key` header:
-
-    ```
-    X-API-Key: your-api-key-here
-    ```
-
-    ## Rate Limiting
-
-    API requests are rate-limited to {rate_limit} requests per hour per API key.
-
-    ## Endpoints
-
-    * `GET /api/v1/books` - Get books with filtering and pagination
-    * `GET /api/v1/books/{{book_id}}` - Get a specific book by ID
-    * `GET /api/v1/changes` - Get recent changes and updates
-
-    """.format(rate_limit=settings.rate_limit_per_hour),
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",

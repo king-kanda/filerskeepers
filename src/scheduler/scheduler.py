@@ -12,9 +12,9 @@ from src.utils.logger import log
 class CrawlScheduler:
     """Scheduler for automated book crawling and change detection."""
 
-    def __init__(self):
+    def __init__(self, event_loop=None):
         """Initialize the scheduler."""
-        self.scheduler = AsyncIOScheduler()
+        self.scheduler = AsyncIOScheduler(event_loop=event_loop)
         self.change_detector = ChangeDetector()
         self.is_running = False
 
@@ -150,14 +150,23 @@ class CrawlScheduler:
 
 def run_scheduler():
     """Run the scheduler in blocking mode."""
-    scheduler = CrawlScheduler()
+    # Create event loop before creating AsyncIOScheduler
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        # No running loop, create a new one
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+    # Pass event loop explicitly to scheduler
+    scheduler = CrawlScheduler(event_loop=loop)
     scheduler.start()
 
     log.info("Scheduler is running. Press Ctrl+C to exit.")
 
     try:
         # Keep the scheduler running
-        asyncio.get_event_loop().run_forever()
+        loop.run_forever()
     except (KeyboardInterrupt, SystemExit):
         log.info("Shutting down scheduler...")
         scheduler.stop()

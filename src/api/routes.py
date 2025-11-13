@@ -1,6 +1,6 @@
 """API route definitions."""
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from src.api.auth import verify_api_key
 from src.api.rate_limiter import limiter
 from src.database.mongodb import db
@@ -26,6 +26,7 @@ router = APIRouter(prefix="/api/v1", tags=["books"])
 )
 @limiter.limit(f"100/hour")
 async def get_books(
+    request: Request,
     category: Optional[str] = Query(None, description="Filter by category"),
     min_price: Optional[float] = Query(None, ge=0, description="Minimum price (inclusive)"),
     max_price: Optional[float] = Query(None, ge=0, description="Maximum price (inclusive)"),
@@ -123,6 +124,7 @@ async def get_books(
 )
 @limiter.limit(f"100/hour")
 async def get_book_by_id(
+    request: Request,
     book_id: str,
     api_key: str = Depends(verify_api_key)
 ):
@@ -182,6 +184,7 @@ async def get_book_by_id(
 )
 @limiter.limit(f"100/hour")
 async def get_changes(
+    request: Request,
     book_id: Optional[str] = Query(None, description="Filter by book ID"),
     change_type: Optional[str] = Query(None, description="Filter by change type"),
     page: int = Query(1, ge=1, description="Page number"),
@@ -249,26 +252,3 @@ async def get_changes(
         )
 
 
-@router.get(
-    "/health",
-    summary="Health check",
-    description="Check if the API is running and database is connected.",
-    tags=["system"]
-)
-async def health_check():
-    """Health check endpoint."""
-    try:
-        # Check database connection
-        await db.db.command("ping")
-
-        return {
-            "status": "healthy",
-            "database": "connected",
-            "timestamp": "2025-11-12T00:00:00Z"
-        }
-    except Exception as e:
-        log.error(f"Health check failed: {e}")
-        raise HTTPException(
-            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Service unhealthy"
-        )
