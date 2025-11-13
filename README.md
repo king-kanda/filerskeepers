@@ -1,8 +1,6 @@
 # Books Scraper - Production-Grade Web Scraping & API System
 
-A comprehensive, production-ready web scraping and API system for monitoring and serving book data from [books.toscrape.com](https://books.toscrape.com). Built with modern Python technologies including FastAPI, MongoDB, and async programming.
-
-## 🚀 Features
+## Features
 
 ### Part 1: Robust & Scalable Crawler
 - ✅ Async web crawling with `httpx` for high performance
@@ -449,18 +447,6 @@ CRAWL_SCHEDULE_HOUR=2
 CRAWL_SCHEDULE_MINUTE=0
 ```
 
-### Email Alerts
-
-Configure SMTP settings in `.env` to receive email alerts:
-
-```bash
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password  # Use app-specific password for Gmail
-ALERT_EMAIL=alerts@example.com
-```
-
 ### Change Reports
 
 Reports are automatically generated in `reports/` directory:
@@ -496,16 +482,7 @@ docker-compose exec api python run_crawler.py
 docker-compose exec mongodb mongosh books_scraper
 ```
 
-## 📝 Logging
 
-Logs are written to:
-- Console (with colors)
-- File: `logs/app.log` (with rotation)
-
-Configure log level in `.env`:
-```bash
-LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
-```
 
 ## 🔒 Security Considerations
 
@@ -515,57 +492,3 @@ LOG_LEVEL=INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
 4. **CORS**: Configure allowed origins appropriately
 5. **Rate Limiting**: Adjust limits based on your needs
 6. **HTTPS**: Use reverse proxy (nginx) with SSL in production
-
-## 🚀 Production Deployment
-
-### Recommended Setup
-
-1. **Use Docker Compose** with proper resource limits
-2. **Enable MongoDB authentication**
-3. **Use nginx as reverse proxy** with SSL/TLS
-4. **Configure firewall** to restrict MongoDB access
-5. **Set up monitoring** (Prometheus, Grafana)
-6. **Configure log aggregation** (ELK stack)
-7. **Set up automated backups** for MongoDB
-
-### Example nginx Configuration
-
-```nginx
-server {
-    listen 80;
-    server_name api.example.com;
-
-    location / {
-        proxy_pass http://localhost:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
-## 📄 License
-
-This project is for educational and demonstration purposes.
-
-## 👥 Author
-
-Created as a production-grade solution for web scraping and API development.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new features
-4. Submit a pull request
-
-## 📞 Support
-
-For issues and questions:
-- Check the [documentation](#-api-documentation)
-- Review logs in `logs/app.log`
-- Open an issue on GitHub
-
----
-
-**Happy Scraping! 🎉**
