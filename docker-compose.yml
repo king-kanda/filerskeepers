@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  # MongoDB database
+  mongodb:
+    image: mongo:7.0
+    container_name: books-scraper-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: books_scraper
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - books-scraper-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI application
+  api:
+    build: .
+    container_name: books-scraper-api
+    restart: unless-stopped
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=books_scraper
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_KEYS=${API_KEYS:-dev-key-1,dev-key-2}
+      - RATE_LIMIT_PER_HOUR=${RATE_LIMIT_PER_HOUR:-100}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./scraper_progress.json:/app/scraper_progress.json
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - books-scraper-network
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Crawler service (runs manually or on schedule)
+  crawler:
+    build: .
+    container_name: books-scraper-crawler
+    restart: "no"
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=books_scraper
+      - TARGET_URL=${TARGET_URL:-https://books.toscrape.com}
+      - MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-10}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
+      - MAX_RETRIES=${MAX_RETRIES:-3}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./scraper_progress.json:/app/scraper_progress.json
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - books-scraper-network
+    command: python run_crawler.py
+    profiles:
+      - crawler
+
+  # Scheduler service (optional - for automated daily crawls)
+  scheduler:
+    build: .
+    container_name: books-scraper-scheduler
+    restart: unless-stopped
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017
+      - MONGODB_DB_NAME=books_scraper
+      - TARGET_URL=${TARGET_URL:-https://books.toscrape.com}
+      - CRAWL_SCHEDULE_HOUR=${CRAWL_SCHEDULE_HOUR:-2}
+      - CRAWL_SCHEDULE_MINUTE=${CRAWL_SCHEDULE_MINUTE:-0}
+      - MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-10}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - ALERT_EMAIL=${ALERT_EMAIL:-}
+    volumes:
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./scraper_progress.json:/app/scraper_progress.json
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - books-scraper-network
+    command: python run_scheduler.py
+    profiles:
+      - scheduler
+
+networks:
+  books-scraper-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  mongodb_config:

@@ -1,0 +1,542 @@
+{
+  "info": {
+    "name": "Books Scraper API",
+    "description": "Production-grade Books Scraper API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "{{api_key}}",
+        "type": "string"
+      },
+      {
+        "key": "key",
+        "value": "X-API-Key",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "dev-key-1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Root",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            },
+            "description": "Get API information"
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "health"]
+            },
+            "description": "Check API health status"
+          }
+        },
+        {
+          "name": "Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stats"]
+            },
+            "description": "Get database statistics"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Get All Books",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get paginated list of all books"
+          }
+        },
+        {
+          "name": "Get Books - Filter by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?category=Fiction&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Fiction"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books filtered by category"
+          }
+        },
+        {
+          "name": "Get Books - Filter by Price Range",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?min_price=10&max_price=50&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "min_price",
+                  "value": "10"
+                },
+                {
+                  "key": "max_price",
+                  "value": "50"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books within a price range"
+          }
+        },
+        {
+          "name": "Get Books - Filter by Rating",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?rating=Five&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "rating",
+                  "value": "Five"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books with specific rating"
+          }
+        },
+        {
+          "name": "Get Books - Sort by Price Ascending",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?sort_by=price&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "price"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books sorted by price (lowest first)"
+          }
+        },
+        {
+          "name": "Get Books - Sort by Price Descending",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?sort_by=-price&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "-price"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books sorted by price (highest first)"
+          }
+        },
+        {
+          "name": "Get Books - Sort by Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?sort_by=-reviews&page=1&page_size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "sort_by",
+                  "value": "-reviews"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Get books sorted by review count (highest first)"
+          }
+        },
+        {
+          "name": "Get Books - Combined Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books?category=Fiction&min_price=20&max_price=60&rating=Four&sort_by=-price&page=1&page_size=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Fiction"
+                },
+                {
+                  "key": "min_price",
+                  "value": "20"
+                },
+                {
+                  "key": "max_price",
+                  "value": "60"
+                },
+                {
+                  "key": "rating",
+                  "value": "Four"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "-price"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get books with multiple filters applied"
+          }
+        },
+        {
+          "name": "Get Book by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books/{{book_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books", "{{book_id}}"]
+            },
+            "description": "Get a specific book by its ID"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Changes",
+      "item": [
+        {
+          "name": "Get All Changes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/changes?page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "changes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get all recent changes"
+          }
+        },
+        {
+          "name": "Get Changes - Price Changes Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/changes?change_type=price_change&page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "changes"],
+              "query": [
+                {
+                  "key": "change_type",
+                  "value": "price_change"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get only price change events"
+          }
+        },
+        {
+          "name": "Get Changes - New Books Only",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/changes?change_type=new_book&page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "changes"],
+              "query": [
+                {
+                  "key": "change_type",
+                  "value": "new_book"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get only new book additions"
+          }
+        },
+        {
+          "name": "Get Changes - Availability Changes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/changes?change_type=availability_change&page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "changes"],
+              "query": [
+                {
+                  "key": "change_type",
+                  "value": "availability_change"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get only availability change events"
+          }
+        },
+        {
+          "name": "Get Changes - By Book ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/changes?book_id={{book_id}}&page=1&page_size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "changes"],
+              "query": [
+                {
+                  "key": "book_id",
+                  "value": "{{book_id}}"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Get changes for a specific book"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Error Cases",
+      "item": [
+        {
+          "name": "No API Key (401)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"]
+            },
+            "description": "Test missing API key error"
+          }
+        },
+        {
+          "name": "Invalid API Key (401)",
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "invalid-key",
+                  "type": "string"
+                },
+                {
+                  "key": "key",
+                  "value": "X-API-Key",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books"]
+            },
+            "description": "Test invalid API key error"
+          }
+        },
+        {
+          "name": "Invalid Book ID (400)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books/invalid-id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books", "invalid-id"]
+            },
+            "description": "Test invalid book ID format"
+          }
+        },
+        {
+          "name": "Book Not Found (404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/books/507f1f77bcf86cd799439011",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "books", "507f1f77bcf86cd799439011"]
+            },
+            "description": "Test book not found error"
+          }
+        }
+      ]
+    }
+  ]
+}
